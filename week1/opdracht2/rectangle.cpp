@@ -8,10 +8,18 @@ rectangle::rectangle(window &w, int start_x, int start_y, int end_x, int end_y):
 {
 }
 
-void rectangle::draw() {
+void rectangle::print() {
     for(int i = start_x; i < end_x; ++i) {
         for(int j = start_y; j < end_y; ++j) {
             w.draw(i,j);
+        }
+    }
+}
+
+void rectangle::print(COLORREF color) {
+    for(int i = start_x; i < end_x; ++i) {
+        for(int j = start_y; j < end_y; ++j) {
+            w.draw(i,j, color);
         }
     }
 }

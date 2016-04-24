@@ -5,6 +5,7 @@
 #define RECTANGLE_HPP
 
 #include "window.hpp"
+#include "windows.h"
 
 class rectangle {
     private:
@@ -12,7 +13,8 @@ class rectangle {
         window &w;
     public:
         rectangle(window &w, int start_x, int start_y, int end_x, int end_y);
-        void draw();
+        void print();
+        void print(COLORREF color);
 };
 
 
