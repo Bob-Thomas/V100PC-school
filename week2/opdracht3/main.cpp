@@ -1,6 +1,6 @@
 #include "ostream"
 #include "catch_with_main.hpp"
-#include "vector.h"
+#include "vector.hpp"
 
 TEST_CASE("constructor, two_parameters") {
     vector v(3, 4);

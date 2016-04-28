@@ -2,7 +2,7 @@
 // Created by smart on 4/28/2016.
 //
 
-#include "vector.h"
+#include "vector.hpp"
 
 vector::vector() { }
 
@@ -67,6 +67,9 @@ vector &operator*=(vector &v, const int value) {
     return v;
 }
 
+// assign division with vector
+//
+// Divide the given vector by the given value
 vector &operator/=(vector &v, const int value) {
     v.x /= value;
     v.y /= value;

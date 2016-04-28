@@ -34,7 +34,7 @@ set(WEEK2.1_FILES
 
 set(WEEK2.3_FILES
         Catch/include/catch_with_main.hpp
-        week2/opdracht3/vector.h
+        week2/opdracht3/vector.hpp
         week2/opdracht3/vector.cpp
         week2/opdracht3/main.cpp
         )
