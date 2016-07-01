@@ -15,8 +15,10 @@ class wall : public rectangle {
         vector end;
 
     public:
-        wall( window & w, const vector & start, const vector & end, const int update_interval, const vector &bounce);
+        wall(window &w, const vector &start, const vector &end, const int update_interval, const vector &bounce);
+
         void draw() override;
+
         void update() override;
 };
 

@@ -10,9 +10,12 @@ class victim : public rectangle {
         vector end;
     public:
         bool touched;
-        victim( window &w, const vector &start, const vector &end);
+
+        victim(window &w, const vector &start, const vector &end);
+
         void update() override;
-        void interact( drawable & other ) override;
+
+        void interact(drawable &other) override;
 };
 
 

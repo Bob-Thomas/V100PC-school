@@ -13,15 +13,15 @@
 
 namespace Catch {
 
-    NotImplementedException::NotImplementedException( SourceLineInfo const& lineInfo )
-    :   m_lineInfo( lineInfo ) {
+    NotImplementedException::NotImplementedException(SourceLineInfo const &lineInfo)
+            : m_lineInfo(lineInfo) {
         std::ostringstream oss;
         oss << lineInfo << ": function ";
         oss << "not implemented";
         m_what = oss.str();
     }
 
-    const char* NotImplementedException::what() const CATCH_NOEXCEPT {
+    const char *NotImplementedException::what() const CATCH_NOEXCEPT {
         return m_what.c_str();
     }
 

@@ -13,13 +13,13 @@
 
 namespace Catch {
 
-    struct AssertionInfo
-    {
-        AssertionInfo() {}
-        AssertionInfo(  std::string const& _macroName,
-                        SourceLineInfo const& _lineInfo,
-                        std::string const& _capturedExpression,
-                        ResultDisposition::Flags _resultDisposition );
+    struct AssertionInfo {
+        AssertionInfo() { }
+
+        AssertionInfo(std::string const &_macroName,
+                      SourceLineInfo const &_lineInfo,
+                      std::string const &_capturedExpression,
+                      ResultDisposition::Flags _resultDisposition);
 
         std::string macroName;
         SourceLineInfo lineInfo;
@@ -27,9 +27,8 @@ namespace Catch {
         ResultDisposition::Flags resultDisposition;
     };
 
-    struct AssertionResultData
-    {
-        AssertionResultData() : resultType( ResultWas::Unknown ) {}
+    struct AssertionResultData {
+        AssertionResultData() : resultType(ResultWas::Unknown) { }
 
         std::string reconstructedExpression;
         std::string message;
@@ -37,33 +36,47 @@ namespace Catch {
     };
 
     class AssertionResult {
-    public:
-        AssertionResult();
-        AssertionResult( AssertionInfo const& info, AssertionResultData const& data );
-        ~AssertionResult();
+        public:
+            AssertionResult();
+
+            AssertionResult(AssertionInfo const &info, AssertionResultData const &data);
+
+            ~AssertionResult();
+
 #  ifdef CATCH_CONFIG_CPP11_GENERATED_METHODS
-         AssertionResult( AssertionResult const& )              = default;
-         AssertionResult( AssertionResult && )                  = default;
-         AssertionResult& operator = ( AssertionResult const& ) = default;
-         AssertionResult& operator = ( AssertionResult && )     = default;
+            AssertionResult( AssertionResult const& )              = default;
+            AssertionResult( AssertionResult && )                  = default;
+            AssertionResult& operator = ( AssertionResult const& ) = default;
+            AssertionResult& operator = ( AssertionResult && )     = default;
 #  endif
 
-        bool isOk() const;
-        bool succeeded() const;
-        ResultWas::OfType getResultType() const;
-        bool hasExpression() const;
-        bool hasMessage() const;
-        std::string getExpression() const;
-        std::string getExpressionInMacro() const;
-        bool hasExpandedExpression() const;
-        std::string getExpandedExpression() const;
-        std::string getMessage() const;
-        SourceLineInfo getSourceInfo() const;
-        std::string getTestMacroName() const;
+            bool isOk() const;
 
-    protected:
-        AssertionInfo m_info;
-        AssertionResultData m_resultData;
+            bool succeeded() const;
+
+            ResultWas::OfType getResultType() const;
+
+            bool hasExpression() const;
+
+            bool hasMessage() const;
+
+            std::string getExpression() const;
+
+            std::string getExpressionInMacro() const;
+
+            bool hasExpandedExpression() const;
+
+            std::string getExpandedExpression() const;
+
+            std::string getMessage() const;
+
+            SourceLineInfo getSourceInfo() const;
+
+            std::string getTestMacroName() const;
+
+        protected:
+            AssertionInfo m_info;
+            AssertionResultData m_resultData;
     };
 
 } // end namespace Catch

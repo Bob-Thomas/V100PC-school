@@ -13,16 +13,17 @@
 
 #include <string>
 
-namespace Catch{
+namespace Catch {
 
     bool isDebuggerActive();
-    void writeToDebugConsole( std::string const& text );
+
+    void writeToDebugConsole(std::string const &text);
 }
 
 #ifdef CATCH_PLATFORM_MAC
 
-    // The following code snippet based on:
-    // http://cocoawithlove.com/2008/03/break-into-debugger.html
+// The following code snippet based on:
+// http://cocoawithlove.com/2008/03/break-into-debugger.html
     #ifdef DEBUG
         #if defined(__ppc64__) || defined(__ppc__)
             #define CATCH_BREAK_INTO_DEBUGGER() \
@@ -38,7 +39,7 @@ namespace Catch{
 #elif defined(_MSC_VER)
     #define CATCH_BREAK_INTO_DEBUGGER() if( Catch::isDebuggerActive() ) { __debugbreak(); }
 #elif defined(__MINGW32__)
-    extern "C" __declspec(dllimport) void __stdcall DebugBreak();
+extern "C" __declspec(dllimport) void __stdcall DebugBreak();
     #define CATCH_BREAK_INTO_DEBUGGER() if( Catch::isDebuggerActive() ) { DebugBreak(); }
 #endif
 

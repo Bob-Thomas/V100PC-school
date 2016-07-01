@@ -4,8 +4,7 @@ drawable::drawable(window &w, const vector &location, const vector &size) :
         w(w),
         location(location),
         size(size),
-        bounce(vector(1, 1))
-{ }
+        bounce(vector(1, 1)) { }
 
 bool within(int x, int a, int b) {
     return (x >= a) && (x <= b);

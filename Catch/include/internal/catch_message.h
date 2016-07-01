@@ -15,35 +15,36 @@
 namespace Catch {
 
     struct MessageInfo {
-        MessageInfo(    std::string const& _macroName,
-                        SourceLineInfo const& _lineInfo,
-                        ResultWas::OfType _type );
+            MessageInfo(std::string const &_macroName,
+                        SourceLineInfo const &_lineInfo,
+                        ResultWas::OfType _type);
 
-        std::string macroName;
-        SourceLineInfo lineInfo;
-        ResultWas::OfType type;
-        std::string message;
-        unsigned int sequence;
+            std::string macroName;
+            SourceLineInfo lineInfo;
+            ResultWas::OfType type;
+            std::string message;
+            unsigned int sequence;
 
-        bool operator == ( MessageInfo const& other ) const {
-            return sequence == other.sequence;
-        }
-        bool operator < ( MessageInfo const& other ) const {
-            return sequence < other.sequence;
-        }
-    private:
-        static unsigned int globalCount;
+            bool operator==(MessageInfo const &other) const {
+                return sequence == other.sequence;
+            }
+
+            bool operator<(MessageInfo const &other) const {
+                return sequence < other.sequence;
+            }
+
+        private:
+            static unsigned int globalCount;
     };
 
     struct MessageBuilder {
-        MessageBuilder( std::string const& macroName,
-                        SourceLineInfo const& lineInfo,
-                        ResultWas::OfType type )
-        : m_info( macroName, lineInfo, type )
-        {}
+        MessageBuilder(std::string const &macroName,
+                       SourceLineInfo const &lineInfo,
+                       ResultWas::OfType type)
+                : m_info(macroName, lineInfo, type) { }
 
         template<typename T>
-        MessageBuilder& operator << ( T const& value ) {
+        MessageBuilder &operator<<(T const &value) {
             m_stream << value;
             return *this;
         }
@@ -53,12 +54,14 @@ namespace Catch {
     };
 
     class ScopedMessage {
-    public:
-        ScopedMessage( MessageBuilder const& builder );
-        ScopedMessage( ScopedMessage const& other );
-        ~ScopedMessage();
+        public:
+            ScopedMessage(MessageBuilder const &builder);
 
-        MessageInfo m_info;
+            ScopedMessage(ScopedMessage const &other);
+
+            ~ScopedMessage();
+
+            MessageInfo m_info;
     };
 
 } // end namespace Catch

@@ -19,92 +19,108 @@
 namespace Catch {
 
     class TestSpecParser {
-        enum Mode{ None, Name, QuotedName, Tag };
-        Mode m_mode;
-        bool m_exclusion;
-        std::size_t m_start, m_pos;
-        std::string m_arg;
-        TestSpec::Filter m_currentFilter;
-        TestSpec m_testSpec;
-        ITagAliasRegistry const* m_tagAliases;
+            enum Mode {
+                None, Name, QuotedName, Tag
+            };
+            Mode m_mode;
+            bool m_exclusion;
+            std::size_t m_start, m_pos;
+            std::string m_arg;
+            TestSpec::Filter m_currentFilter;
+            TestSpec m_testSpec;
+            ITagAliasRegistry const *m_tagAliases;
 
-    public:
-        TestSpecParser( ITagAliasRegistry const& tagAliases ) : m_tagAliases( &tagAliases ) {}
+        public:
+            TestSpecParser(ITagAliasRegistry const &tagAliases) : m_tagAliases(&tagAliases) { }
 
-        TestSpecParser& parse( std::string const& arg ) {
-            m_mode = None;
-            m_exclusion = false;
-            m_start = std::string::npos;
-            m_arg = m_tagAliases->expandAliases( arg );
-            for( m_pos = 0; m_pos < m_arg.size(); ++m_pos )
-                visitChar( m_arg[m_pos] );
-            if( m_mode == Name )
-                addPattern<TestSpec::NamePattern>();
-            return *this;
-        }
-        TestSpec testSpec() {
-            addFilter();
-            return m_testSpec;
-        }
-    private:
-        void visitChar( char c ) {
-            if( m_mode == None ) {
-                switch( c ) {
-                case ' ': return;
-                case '~': m_exclusion = true; return;
-                case '[': return startNewMode( Tag, ++m_pos );
-                case '"': return startNewMode( QuotedName, ++m_pos );
-                default: startNewMode( Name, m_pos ); break;
-                }
-            }
-            if( m_mode == Name ) {
-                if( c == ',' ) {
+            TestSpecParser &parse(std::string const &arg) {
+                m_mode = None;
+                m_exclusion = false;
+                m_start = std::string::npos;
+                m_arg = m_tagAliases->expandAliases(arg);
+                for (m_pos = 0; m_pos < m_arg.size(); ++m_pos)
+                    visitChar(m_arg[m_pos]);
+                if (m_mode == Name)
                     addPattern<TestSpec::NamePattern>();
-                    addFilter();
+                return *this;
+            }
+
+            TestSpec testSpec() {
+                addFilter();
+                return m_testSpec;
+            }
+
+        private:
+            void visitChar(char c) {
+                if (m_mode == None) {
+                    switch (c) {
+                        case ' ':
+                            return;
+                        case '~':
+                            m_exclusion = true;
+                            return;
+                        case '[':
+                            return startNewMode(Tag, ++m_pos);
+                        case '"':
+                            return startNewMode(QuotedName, ++m_pos);
+                        default:
+                            startNewMode(Name, m_pos);
+                            break;
+                    }
                 }
-                else if( c == '[' ) {
-                    if( subString() == "exclude:" )
-                        m_exclusion = true;
-                    else
+                if (m_mode == Name) {
+                    if (c == ',') {
                         addPattern<TestSpec::NamePattern>();
-                    startNewMode( Tag, ++m_pos );
+                        addFilter();
+                    }
+                    else if (c == '[') {
+                        if (subString() == "exclude:")
+                            m_exclusion = true;
+                        else
+                            addPattern<TestSpec::NamePattern>();
+                        startNewMode(Tag, ++m_pos);
+                    }
+                }
+                else if (m_mode == QuotedName && c == '"')
+                    addPattern<TestSpec::NamePattern>();
+                else if (m_mode == Tag && c == ']')
+                    addPattern<TestSpec::TagPattern>();
+            }
+
+            void startNewMode(Mode mode, std::size_t start) {
+                m_mode = mode;
+                m_start = start;
+            }
+
+            std::string subString() const { return m_arg.substr(m_start, m_pos - m_start); }
+
+            template<typename T>
+            void addPattern() {
+                std::string token = subString();
+                if (startsWith(token, "exclude:")) {
+                    m_exclusion = true;
+                    token = token.substr(8);
+                }
+                if (!token.empty()) {
+                    Ptr<TestSpec::Pattern> pattern = new T(token);
+                    if (m_exclusion)
+                        pattern = new TestSpec::ExcludedPattern(pattern);
+                    m_currentFilter.m_patterns.push_back(pattern);
+                }
+                m_exclusion = false;
+                m_mode = None;
+            }
+
+            void addFilter() {
+                if (!m_currentFilter.m_patterns.empty()) {
+                    m_testSpec.m_filters.push_back(m_currentFilter);
+                    m_currentFilter = TestSpec::Filter();
                 }
             }
-            else if( m_mode == QuotedName && c == '"' )
-                addPattern<TestSpec::NamePattern>();
-            else if( m_mode == Tag && c == ']' )
-                addPattern<TestSpec::TagPattern>();
-        }
-        void startNewMode( Mode mode, std::size_t start ) {
-            m_mode = mode;
-            m_start = start;
-        }
-        std::string subString() const { return m_arg.substr( m_start, m_pos - m_start ); }
-        template<typename T>
-        void addPattern() {
-            std::string token = subString();
-            if( startsWith( token, "exclude:" ) ) {
-                m_exclusion = true;
-                token = token.substr( 8 );
-            }
-            if( !token.empty() ) {
-                Ptr<TestSpec::Pattern> pattern = new T( token );
-                if( m_exclusion )
-                    pattern = new TestSpec::ExcludedPattern( pattern );
-                m_currentFilter.m_patterns.push_back( pattern );
-            }
-            m_exclusion = false;
-            m_mode = None;
-        }
-        void addFilter() {
-            if( !m_currentFilter.m_patterns.empty() ) {
-                m_testSpec.m_filters.push_back( m_currentFilter );
-                m_currentFilter = TestSpec::Filter();
-            }
-        }
     };
-    inline TestSpec parseTestSpec( std::string const& arg ) {
-        return TestSpecParser( ITagAliasRegistry::get() ).parse( arg ).testSpec();
+
+    inline TestSpec parseTestSpec(std::string const &arg) {
+        return TestSpecParser(ITagAliasRegistry::get()).parse(arg).testSpec();
     }
 
 } // namespace Catch

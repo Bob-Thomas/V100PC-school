@@ -17,26 +17,27 @@
 namespace Catch {
 
     class Section : NonCopyable {
-    public:
-        Section( SectionInfo const& info );
-        ~Section();
+        public:
+            Section(SectionInfo const &info);
 
-        // This indicates whether the section should be executed or not
-        operator bool() const;
+            ~Section();
 
-    private:
-        SectionInfo m_info;
+            // This indicates whether the section should be executed or not
+            operator bool() const;
 
-        std::string m_name;
-        Counts m_assertions;
-        bool m_sectionIncluded;
-        Timer m_timer;
+        private:
+            SectionInfo m_info;
+
+            std::string m_name;
+            Counts m_assertions;
+            bool m_sectionIncluded;
+            Timer m_timer;
     };
 
 } // end namespace Catch
 
 #ifdef CATCH_CONFIG_VARIADIC_MACROS
-    #define INTERNAL_CATCH_SECTION( ... ) \
+    #define INTERNAL_CATCH_SECTION(...) \
         if( Catch::Section const& INTERNAL_CATCH_UNIQUE_NAME( catch_internal_Section ) = Catch::SectionInfo( CATCH_INTERNAL_LINEINFO, __VA_ARGS__ ) )
 #else
     #define INTERNAL_CATCH_SECTION( name, desc ) \

@@ -16,18 +16,27 @@
 #define CATCH_ARC_ENABLED 0
 #endif
 
-void arcSafeRelease( NSObject* obj );
-id performOptionalSelector( id obj, SEL sel );
+void arcSafeRelease(NSObject *obj);
+
+id performOptionalSelector(id obj, SEL sel);
 
 #if !CATCH_ARC_ENABLED
-inline void arcSafeRelease( NSObject* obj ) {
-    [obj release];
+
+inline void arcSafeRelease(NSObject *obj) {
+    [obj
+    release];
 }
-inline id performOptionalSelector( id obj, SEL sel ) {
-    if( [obj respondsToSelector: sel] )
-        return [obj performSelector: sel];
+
+inline id performOptionalSelector(id obj, SEL sel) {
+    if ( [obj
+    respondsToSelector:
+    sel] )
+    return [obj
+    performSelector:
+    sel];
     return nil;
 }
+
 #define CATCH_UNSAFE_UNRETAINED
 #define CATCH_ARC_STRONG
 #else

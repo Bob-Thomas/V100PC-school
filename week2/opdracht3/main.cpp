@@ -11,7 +11,7 @@ TEST_CASE("constructor, two_parameters") {
 
 TEST_CASE("add") {
     vector v(3, 4);
-    v =  v + vector(3, 4);
+    v = v + vector(3, 4);
     REQUIRE(v == vector(6, 8));
 }
 
@@ -23,7 +23,7 @@ TEST_CASE("add assign") {
 
 TEST_CASE("substract") {
     vector v(6, 8);
-    v =  v - vector(3, 4);
+    v = v - vector(3, 4);
     REQUIRE(v == vector(3, 4));
 }
 
@@ -35,7 +35,7 @@ TEST_CASE("subtract assign") {
 
 TEST_CASE("multiply") {
     vector v(3, 4);
-    v  = v * 2;
+    v = v * 2;
     REQUIRE(v == vector(6, 8));
 }
 

@@ -14,14 +14,15 @@ namespace Catch {
     namespace {
 
         struct IColourImpl {
-            virtual ~IColourImpl() {}
-            virtual void use( Colour::Code _colourCode ) = 0;
+            virtual ~IColourImpl() { }
+
+            virtual void use(Colour::Code _colourCode) = 0;
         };
 
         struct NoColourImpl : IColourImpl {
-            void use( Colour::Code ) {}
+            void use(Colour::Code) { }
 
-            static IColourImpl* instance() {
+            static IColourImpl *instance() {
                 static NoColourImpl s_instance;
                 return &s_instance;
             }
@@ -117,59 +118,72 @@ namespace {
 #include <unistd.h>
 
 namespace Catch {
-namespace {
+    namespace {
 
-    // use POSIX/ ANSI console terminal codes
-    // Thanks to Adam Strzelecki for original contribution
-    // (http://github.com/nanoant)
-    // https://github.com/philsquared/Catch/pull/131
-    class PosixColourImpl : public IColourImpl {
-    public:
-        virtual void use( Colour::Code _colourCode ) {
-            switch( _colourCode ) {
-                case Colour::None:
-                case Colour::White:     return setColour( "[0m" );
-                case Colour::Red:       return setColour( "[0;31m" );
-                case Colour::Green:     return setColour( "[0;32m" );
-                case Colour::Blue:      return setColour( "[0:34m" );
-                case Colour::Cyan:      return setColour( "[0;36m" );
-                case Colour::Yellow:    return setColour( "[0;33m" );
-                case Colour::Grey:      return setColour( "[1;30m" );
+        // use POSIX/ ANSI console terminal codes
+        // Thanks to Adam Strzelecki for original contribution
+        // (http://github.com/nanoant)
+        // https://github.com/philsquared/Catch/pull/131
+        class PosixColourImpl : public IColourImpl {
+            public:
+                virtual void use(Colour::Code _colourCode) {
+                    switch (_colourCode) {
+                        case Colour::None:
+                        case Colour::White:
+                            return setColour("[0m");
+                        case Colour::Red:
+                            return setColour("[0;31m");
+                        case Colour::Green:
+                            return setColour("[0;32m");
+                        case Colour::Blue:
+                            return setColour("[0:34m");
+                        case Colour::Cyan:
+                            return setColour("[0;36m");
+                        case Colour::Yellow:
+                            return setColour("[0;33m");
+                        case Colour::Grey:
+                            return setColour("[1;30m");
 
-                case Colour::LightGrey:     return setColour( "[0;37m" );
-                case Colour::BrightRed:     return setColour( "[1;31m" );
-                case Colour::BrightGreen:   return setColour( "[1;32m" );
-                case Colour::BrightWhite:   return setColour( "[1;37m" );
+                        case Colour::LightGrey:
+                            return setColour("[0;37m");
+                        case Colour::BrightRed:
+                            return setColour("[1;31m");
+                        case Colour::BrightGreen:
+                            return setColour("[1;32m");
+                        case Colour::BrightWhite:
+                            return setColour("[1;37m");
 
-                case Colour::Bright: throw std::logic_error( "not a colour" );
-            }
+                        case Colour::Bright:
+                            throw std::logic_error("not a colour");
+                    }
+                }
+
+                static IColourImpl *instance() {
+                    static PosixColourImpl s_instance;
+                    return &s_instance;
+                }
+
+            private:
+                void setColour(const char *_escapeCode) {
+                    Catch::cout() << '\033' << _escapeCode;
+                }
+        };
+
+        IColourImpl *platformColourInstance() {
+            Ptr < IConfig const> config = getCurrentContext().getConfig();
+            UseColour::YesOrNo colourMode = config
+                                            ? config->useColour()
+                                            : UseColour::Auto;
+            if (colourMode == UseColour::Auto)
+                colourMode = (!isDebuggerActive() && isatty(STDOUT_FILENO))
+                             ? UseColour::Yes
+                             : UseColour::No;
+            return colourMode == UseColour::Yes
+                   ? PosixColourImpl::instance()
+                   : NoColourImpl::instance();
         }
-        static IColourImpl* instance() {
-            static PosixColourImpl s_instance;
-            return &s_instance;
-        }
 
-    private:
-        void setColour( const char* _escapeCode ) {
-            Catch::cout() << '\033' << _escapeCode;
-        }
-    };
-
-    IColourImpl* platformColourInstance() {
-        Ptr<IConfig const> config = getCurrentContext().getConfig();
-        UseColour::YesOrNo colourMode = config
-            ? config->useColour()
-            : UseColour::Auto;
-        if( colourMode == UseColour::Auto )
-            colourMode = (!isDebuggerActive() && isatty(STDOUT_FILENO) )
-                ? UseColour::Yes
-                : UseColour::No;
-        return colourMode == UseColour::Yes
-            ? PosixColourImpl::instance()
-            : NoColourImpl::instance();
-    }
-
-} // end anon namespace
+    } // end anon namespace
 } // end namespace Catch
 
 #else  // not Windows or ANSI ///////////////////////////////////////////////
@@ -184,13 +198,15 @@ namespace Catch {
 
 namespace Catch {
 
-    Colour::Colour( Code _colourCode ) : m_moved( false ) { use( _colourCode ); }
-    Colour::Colour( Colour const& _other ) : m_moved( false ) { const_cast<Colour&>( _other ).m_moved = true; }
-    Colour::~Colour(){ if( !m_moved ) use( None ); }
+    Colour::Colour(Code _colourCode) : m_moved(false) { use(_colourCode); }
 
-    void Colour::use( Code _colourCode ) {
-        static IColourImpl* impl = platformColourInstance();
-        impl->use( _colourCode );
+    Colour::Colour(Colour const &_other) : m_moved(false) { const_cast<Colour &>( _other ).m_moved = true; }
+
+    Colour::~Colour() { if (!m_moved) use(None); }
+
+    void Colour::use(Code _colourCode) {
+        static IColourImpl *impl = platformColourInstance();
+        impl->use(_colourCode);
     }
 
 } // end namespace Catch

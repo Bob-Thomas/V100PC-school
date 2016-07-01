@@ -19,15 +19,19 @@ typedef unsigned long long uint64_t;
 namespace Catch {
 
     class Timer {
-    public:
-        Timer() : m_ticks( 0 ) {}
-        void start();
-        unsigned int getElapsedMicroseconds() const;
-        unsigned int getElapsedMilliseconds() const;
-        double getElapsedSeconds() const;
+        public:
+            Timer() : m_ticks(0) { }
 
-    private:
-        uint64_t m_ticks;
+            void start();
+
+            unsigned int getElapsedMicroseconds() const;
+
+            unsigned int getElapsedMilliseconds() const;
+
+            double getElapsedSeconds() const;
+
+        private:
+            uint64_t m_ticks;
     };
 
 } // namespace Catch

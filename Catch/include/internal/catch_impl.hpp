@@ -46,63 +46,110 @@
 namespace Catch {
     // These are all here to avoid warnings about not having any out of line
     // virtual methods
-    NonCopyable::~NonCopyable() {}
-    IShared::~IShared() {}
-    IStream::~IStream() CATCH_NOEXCEPT {}
-    FileStream::~FileStream() CATCH_NOEXCEPT {}
-    CoutStream::~CoutStream() CATCH_NOEXCEPT {}
-    DebugOutStream::~DebugOutStream() CATCH_NOEXCEPT {}
-    StreamBufBase::~StreamBufBase() CATCH_NOEXCEPT {}
-    IContext::~IContext() {}
-    IResultCapture::~IResultCapture() {}
-    ITestCase::~ITestCase() {}
-    ITestCaseRegistry::~ITestCaseRegistry() {}
-    IRegistryHub::~IRegistryHub() {}
-    IMutableRegistryHub::~IMutableRegistryHub() {}
-    IExceptionTranslator::~IExceptionTranslator() {}
-    IExceptionTranslatorRegistry::~IExceptionTranslatorRegistry() {}
-    IReporter::~IReporter() {}
-    IReporterFactory::~IReporterFactory() {}
-    IReporterRegistry::~IReporterRegistry() {}
-    IStreamingReporter::~IStreamingReporter() {}
-    AssertionStats::~AssertionStats() {}
-    SectionStats::~SectionStats() {}
-    TestCaseStats::~TestCaseStats() {}
-    TestGroupStats::~TestGroupStats() {}
-    TestRunStats::~TestRunStats() {}
-    CumulativeReporterBase::SectionNode::~SectionNode() {}
-    CumulativeReporterBase::~CumulativeReporterBase() {}
+    NonCopyable::~NonCopyable() { }
 
-    StreamingReporterBase::~StreamingReporterBase() {}
-    ConsoleReporter::~ConsoleReporter() {}
-    CompactReporter::~CompactReporter() {}
-    IRunner::~IRunner() {}
-    IMutableContext::~IMutableContext() {}
-    IConfig::~IConfig() {}
-    XmlReporter::~XmlReporter() {}
-    JunitReporter::~JunitReporter() {}
-    TestRegistry::~TestRegistry() {}
-    FreeFunctionTestCase::~FreeFunctionTestCase() {}
-    IGeneratorInfo::~IGeneratorInfo() {}
-    IGeneratorsForTest::~IGeneratorsForTest() {}
-    WildcardPattern::~WildcardPattern() {}
-    TestSpec::Pattern::~Pattern() {}
-    TestSpec::NamePattern::~NamePattern() {}
-    TestSpec::TagPattern::~TagPattern() {}
-    TestSpec::ExcludedPattern::~ExcludedPattern() {}
+    IShared::~IShared() { }
 
-    Matchers::Impl::StdString::Equals::~Equals() {}
-    Matchers::Impl::StdString::Contains::~Contains() {}
-    Matchers::Impl::StdString::StartsWith::~StartsWith() {}
-    Matchers::Impl::StdString::EndsWith::~EndsWith() {}
+    IStream::~IStream() CATCH_NOEXCEPT { }
 
-    void Config::dummy() {}
+    FileStream::~FileStream() CATCH_NOEXCEPT { }
+
+    CoutStream::~CoutStream() CATCH_NOEXCEPT { }
+
+    DebugOutStream::~DebugOutStream() CATCH_NOEXCEPT { }
+
+    StreamBufBase::~StreamBufBase() CATCH_NOEXCEPT { }
+
+    IContext::~IContext() { }
+
+    IResultCapture::~IResultCapture() { }
+
+    ITestCase::~ITestCase() { }
+
+    ITestCaseRegistry::~ITestCaseRegistry() { }
+
+    IRegistryHub::~IRegistryHub() { }
+
+    IMutableRegistryHub::~IMutableRegistryHub() { }
+
+    IExceptionTranslator::~IExceptionTranslator() { }
+
+    IExceptionTranslatorRegistry::~IExceptionTranslatorRegistry() { }
+
+    IReporter::~IReporter() { }
+
+    IReporterFactory::~IReporterFactory() { }
+
+    IReporterRegistry::~IReporterRegistry() { }
+
+    IStreamingReporter::~IStreamingReporter() { }
+
+    AssertionStats::~AssertionStats() { }
+
+    SectionStats::~SectionStats() { }
+
+    TestCaseStats::~TestCaseStats() { }
+
+    TestGroupStats::~TestGroupStats() { }
+
+    TestRunStats::~TestRunStats() { }
+
+    CumulativeReporterBase::SectionNode::~SectionNode() { }
+
+    CumulativeReporterBase::~CumulativeReporterBase() { }
+
+    StreamingReporterBase::~StreamingReporterBase() { }
+
+    ConsoleReporter::~ConsoleReporter() { }
+
+    CompactReporter::~CompactReporter() { }
+
+    IRunner::~IRunner() { }
+
+    IMutableContext::~IMutableContext() { }
+
+    IConfig::~IConfig() { }
+
+    XmlReporter::~XmlReporter() { }
+
+    JunitReporter::~JunitReporter() { }
+
+    TestRegistry::~TestRegistry() { }
+
+    FreeFunctionTestCase::~FreeFunctionTestCase() { }
+
+    IGeneratorInfo::~IGeneratorInfo() { }
+
+    IGeneratorsForTest::~IGeneratorsForTest() { }
+
+    WildcardPattern::~WildcardPattern() { }
+
+    TestSpec::Pattern::~Pattern() { }
+
+    TestSpec::NamePattern::~NamePattern() { }
+
+    TestSpec::TagPattern::~TagPattern() { }
+
+    TestSpec::ExcludedPattern::~ExcludedPattern() { }
+
+    Matchers::Impl::StdString::Equals::~Equals() { }
+
+    Matchers::Impl::StdString::Contains::~Contains() { }
+
+    Matchers::Impl::StdString::StartsWith::~StartsWith() { }
+
+    Matchers::Impl::StdString::EndsWith::~EndsWith() { }
+
+    void Config::dummy() { }
 
     namespace TestCaseTracking {
-        ITracker::~ITracker() {}
-        TrackerBase::~TrackerBase() {}
-        SectionTracker::~SectionTracker() {}
-        IndexTracker::~IndexTracker() {}
+        ITracker::~ITracker() { }
+
+        TrackerBase::~TrackerBase() { }
+
+        SectionTracker::~SectionTracker() { }
+
+        IndexTracker::~IndexTracker() { }
     }
 }
 

@@ -1,4 +1,4 @@
-var searchData=
-[
-  ['vector',['vector',['../classvector.html',1,'']]]
-];
+var searchData =
+    [
+        ['vector', ['vector', ['../classvector.html', 1, '']]]
+    ];

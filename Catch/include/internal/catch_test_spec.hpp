@@ -22,71 +22,86 @@
 namespace Catch {
 
     class TestSpec {
-        struct Pattern : SharedImpl<> {
-            virtual ~Pattern();
-            virtual bool matches( TestCaseInfo const& testCase ) const = 0;
-        };
-        class NamePattern : public Pattern {
-        public:
-            NamePattern( std::string const& name )
-            : m_wildcardPattern( toLower( name ), CaseSensitive::No )
-            {}
-            virtual ~NamePattern();
-            virtual bool matches( TestCaseInfo const& testCase ) const {
-                return m_wildcardPattern.matches( toLower( testCase.name ) );
-            }
-        private:
-            WildcardPattern m_wildcardPattern;
-        };
+            struct Pattern : SharedImpl<> {
+                virtual ~Pattern();
 
-        class TagPattern : public Pattern {
-        public:
-            TagPattern( std::string const& tag ) : m_tag( toLower( tag ) ) {}
-            virtual ~TagPattern();
-            virtual bool matches( TestCaseInfo const& testCase ) const {
-                return testCase.lcaseTags.find( m_tag ) != testCase.lcaseTags.end();
-            }
-        private:
-            std::string m_tag;
-        };
+                virtual bool matches(TestCaseInfo const &testCase) const = 0;
+            };
 
-        class ExcludedPattern : public Pattern {
-        public:
-            ExcludedPattern( Ptr<Pattern> const& underlyingPattern ) : m_underlyingPattern( underlyingPattern ) {}
-            virtual ~ExcludedPattern();
-            virtual bool matches( TestCaseInfo const& testCase ) const { return !m_underlyingPattern->matches( testCase ); }
-        private:
-            Ptr<Pattern> m_underlyingPattern;
-        };
+            class NamePattern : public Pattern {
+                public:
+                    NamePattern(std::string const &name)
+                            : m_wildcardPattern(toLower(name), CaseSensitive::No) { }
 
-        struct Filter {
-            std::vector<Ptr<Pattern> > m_patterns;
+                    virtual ~NamePattern();
 
-            bool matches( TestCaseInfo const& testCase ) const {
-                // All patterns in a filter must match for the filter to be a match
-                for( std::vector<Ptr<Pattern> >::const_iterator it = m_patterns.begin(), itEnd = m_patterns.end(); it != itEnd; ++it )
-                    if( !(*it)->matches( testCase ) )
-                        return false;
+                    virtual bool matches(TestCaseInfo const &testCase) const {
+                        return m_wildcardPattern.matches(toLower(testCase.name));
+                    }
+
+                private:
+                    WildcardPattern m_wildcardPattern;
+            };
+
+            class TagPattern : public Pattern {
+                public:
+                    TagPattern(std::string const &tag) : m_tag(toLower(tag)) { }
+
+                    virtual ~TagPattern();
+
+                    virtual bool matches(TestCaseInfo const &testCase) const {
+                        return testCase.lcaseTags.find(m_tag) != testCase.lcaseTags.end();
+                    }
+
+                private:
+                    std::string m_tag;
+            };
+
+            class ExcludedPattern : public Pattern {
+                public:
+                    ExcludedPattern(Ptr<Pattern> const &underlyingPattern) : m_underlyingPattern(underlyingPattern) { }
+
+                    virtual ~ExcludedPattern();
+
+                    virtual bool matches(TestCaseInfo const &testCase) const {
+                        return !m_underlyingPattern->matches(testCase);
+                    }
+
+                private:
+                    Ptr<Pattern> m_underlyingPattern;
+            };
+
+            struct Filter {
+                std::vector<Ptr<Pattern> > m_patterns;
+
+                bool matches(TestCaseInfo const &testCase) const {
+                    // All patterns in a filter must match for the filter to be a match
+                    for (std::vector<Ptr<Pattern> >::const_iterator it = m_patterns.begin(), itEnd = m_patterns.end();
+                         it != itEnd; ++it)
+                        if (!(*it)->matches(testCase))
+                            return false;
                     return true;
+                }
+            };
+
+        public:
+            bool hasFilters() const {
+                return !m_filters.empty();
             }
-        };
 
-    public:
-        bool hasFilters() const {
-            return !m_filters.empty();
-        }
-        bool matches( TestCaseInfo const& testCase ) const {
-            // A TestSpec matches if any filter matches
-            for( std::vector<Filter>::const_iterator it = m_filters.begin(), itEnd = m_filters.end(); it != itEnd; ++it )
-                if( it->matches( testCase ) )
-                    return true;
-            return false;
-        }
+            bool matches(TestCaseInfo const &testCase) const {
+                // A TestSpec matches if any filter matches
+                for (std::vector<Filter>::const_iterator it = m_filters.begin(), itEnd = m_filters.end();
+                     it != itEnd; ++it)
+                    if (it->matches(testCase))
+                        return true;
+                return false;
+            }
 
-    private:
-        std::vector<Filter> m_filters;
+        private:
+            std::vector<Filter> m_filters;
 
-        friend class TestSpecParser;
+            friend class TestSpecParser;
     };
 }
 

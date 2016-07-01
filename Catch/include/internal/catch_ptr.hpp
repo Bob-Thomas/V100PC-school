@@ -22,62 +22,77 @@ namespace Catch {
     // typically implementing the IShared interface
     template<typename T>
     class Ptr {
-    public:
-        Ptr() : m_p( CATCH_NULL ){}
-        Ptr( T* p ) : m_p( p ){
-            if( m_p )
-                m_p->addRef();
-        }
-        Ptr( Ptr const& other ) : m_p( other.m_p ){
-            if( m_p )
-                m_p->addRef();
-        }
-        ~Ptr(){
-            if( m_p )
-                m_p->release();
-        }
-        void reset() {
-            if( m_p )
-                m_p->release();
-            m_p = CATCH_NULL;
-        }
-        Ptr& operator = ( T* p ){
-            Ptr temp( p );
-            swap( temp );
-            return *this;
-        }
-        Ptr& operator = ( Ptr const& other ){
-            Ptr temp( other );
-            swap( temp );
-            return *this;
-        }
-        void swap( Ptr& other ) { std::swap( m_p, other.m_p ); }
-        T* get() const{ return m_p; }
-        T& operator*() const { return *m_p; }
-        T* operator->() const { return m_p; }
-        bool operator !() const { return m_p == CATCH_NULL; }
-        operator SafeBool::type() const { return SafeBool::makeSafe( m_p != CATCH_NULL ); }
+        public:
+            Ptr() : m_p(CATCH_NULL) { }
 
-    private:
-        T* m_p;
+            Ptr(T *p) : m_p(p) {
+                if (m_p)
+                    m_p->addRef();
+            }
+
+            Ptr(Ptr const &other) : m_p(other.m_p) {
+                if (m_p)
+                    m_p->addRef();
+            }
+
+            ~Ptr() {
+                if (m_p)
+                    m_p->release();
+            }
+
+            void reset() {
+                if (m_p)
+                    m_p->release();
+                m_p = CATCH_NULL;
+            }
+
+            Ptr &operator=(T *p) {
+                Ptr temp(p);
+                swap(temp);
+                return *this;
+            }
+
+            Ptr &operator=(Ptr const &other) {
+                Ptr temp(other);
+                swap(temp);
+                return *this;
+            }
+
+            void swap(Ptr &other) { std::swap(m_p, other.m_p); }
+
+            T *get() const { return m_p; }
+
+            T &operator*() const { return *m_p; }
+
+            T *operator->() const { return m_p; }
+
+            bool operator!() const { return m_p == CATCH_NULL; }
+
+            operator SafeBool::type() const { return SafeBool::makeSafe(m_p != CATCH_NULL); }
+
+        private:
+            T *m_p;
     };
 
     struct IShared : NonCopyable {
         virtual ~IShared();
+
         virtual void addRef() const = 0;
+
         virtual void release() const = 0;
     };
 
     template<typename T = IShared>
     struct SharedImpl : T {
 
-        SharedImpl() : m_rc( 0 ){}
+        SharedImpl() : m_rc(0) { }
 
         virtual void addRef() const {
             ++m_rc;
         }
+
         virtual void release() const {
-            if( --m_rc == 0 )
+            if (--m_rc == 0)
                 delete this;
         }
 

@@ -25,6 +25,4 @@ void victim::interact(drawable &other) {
             touched = true;
         }
     }
-    print(std::cout);
-    std::cout << "\n";
 }

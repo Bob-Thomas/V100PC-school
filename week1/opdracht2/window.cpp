@@ -7,36 +7,36 @@
 LRESULT CALLBACK
 WndProc(
         HWND
-hwnd,
-UINT Message, WPARAM
-wParam,
-LPARAM lParam
+        hwnd,
+        UINT Message, WPARAM
+        wParam,
+        LPARAM lParam
 ) {
-switch(Message) {
+    switch (Message) {
 
 /* trap the WM_CLOSE => tell the window to close */
-case
+        case
 
-WM_CLOSE: {
-    DestroyWindow(hwnd);
-    break;
-}
+            WM_CLOSE: {
+            DestroyWindow(hwnd);
+            break;
+        }
 
 /* Upon destruction, tell the main thread to stop */
-case
+        case
 
-WM_DESTROY: {
-    PostQuitMessage(0);
-    break;
-}
+            WM_DESTROY: {
+            PostQuitMessage(0);
+            break;
+        }
 
 /* All other messages are processed using default procedures */
-default:
-return
-DefWindowProc(hwnd, Message, wParam, lParam
-);
-}
-return 0;
+        default:
+            return
+                    DefWindowProc(hwnd, Message, wParam, lParam
+                    );
+    }
+    return 0;
 }
 
 void winloop() {
@@ -70,7 +70,7 @@ window::window(int x_size, int y_size, int scale) :
     wc.hInstance = hInstance;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 
-    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wc.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
     wc.lpszClassName = "WindowClass";
     wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);

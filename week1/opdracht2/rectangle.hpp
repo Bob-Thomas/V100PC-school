@@ -13,7 +13,9 @@ class rectangle {
         window &w;
     public:
         rectangle(window &w, int start_x, int start_y, int end_x, int end_y);
+
         void print();
+
         void print(COLORREF color);
 };
 

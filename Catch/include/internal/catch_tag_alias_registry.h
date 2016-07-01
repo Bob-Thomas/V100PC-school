@@ -15,15 +15,19 @@
 namespace Catch {
 
     class TagAliasRegistry : public ITagAliasRegistry {
-    public:
-        virtual ~TagAliasRegistry();
-        virtual Option<TagAlias> find( std::string const& alias ) const;
-        virtual std::string expandAliases( std::string const& unexpandedTestSpec ) const;
-        void add( char const* alias, char const* tag, SourceLineInfo const& lineInfo );
-        static TagAliasRegistry& get();
+        public:
+            virtual ~TagAliasRegistry();
 
-    private:
-        std::map<std::string, TagAlias> m_registry;
+            virtual Option<TagAlias> find(std::string const &alias) const;
+
+            virtual std::string expandAliases(std::string const &unexpandedTestSpec) const;
+
+            void add(char const *alias, char const *tag, SourceLineInfo const &lineInfo);
+
+            static TagAliasRegistry &get();
+
+        private:
+            std::map<std::string, TagAlias> m_registry;
     };
 
 } // end namespace Catch

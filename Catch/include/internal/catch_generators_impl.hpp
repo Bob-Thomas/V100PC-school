@@ -20,13 +20,12 @@ namespace Catch {
 
     struct GeneratorInfo : IGeneratorInfo {
 
-        GeneratorInfo( std::size_t size )
-        :   m_size( size ),
-            m_currentIndex( 0 )
-        {}
+        GeneratorInfo(std::size_t size)
+                : m_size(size),
+                  m_currentIndex(0) { }
 
         bool moveNext() {
-            if( ++m_currentIndex == m_size ) {
+            if (++m_currentIndex == m_size) {
                 m_currentIndex = 0;
                 return false;
             }
@@ -45,39 +44,38 @@ namespace Catch {
 
     class GeneratorsForTest : public IGeneratorsForTest {
 
-    public:
-        ~GeneratorsForTest() {
-            deleteAll( m_generatorsInOrder );
-        }
-
-        IGeneratorInfo& getGeneratorInfo( std::string const& fileInfo, std::size_t size ) {
-            std::map<std::string, IGeneratorInfo*>::const_iterator it = m_generatorsByName.find( fileInfo );
-            if( it == m_generatorsByName.end() ) {
-                IGeneratorInfo* info = new GeneratorInfo( size );
-                m_generatorsByName.insert( std::make_pair( fileInfo, info ) );
-                m_generatorsInOrder.push_back( info );
-                return *info;
+        public:
+            ~GeneratorsForTest() {
+                deleteAll(m_generatorsInOrder);
             }
-            return *it->second;
-        }
 
-        bool moveNext() {
-            std::vector<IGeneratorInfo*>::const_iterator it = m_generatorsInOrder.begin();
-            std::vector<IGeneratorInfo*>::const_iterator itEnd = m_generatorsInOrder.end();
-            for(; it != itEnd; ++it ) {
-                if( (*it)->moveNext() )
-                    return true;
+            IGeneratorInfo &getGeneratorInfo(std::string const &fileInfo, std::size_t size) {
+                std::map<std::string, IGeneratorInfo *>::const_iterator it = m_generatorsByName.find(fileInfo);
+                if (it == m_generatorsByName.end()) {
+                    IGeneratorInfo *info = new GeneratorInfo(size);
+                    m_generatorsByName.insert(std::make_pair(fileInfo, info));
+                    m_generatorsInOrder.push_back(info);
+                    return *info;
+                }
+                return *it->second;
             }
-            return false;
-        }
 
-    private:
-        std::map<std::string, IGeneratorInfo*> m_generatorsByName;
-        std::vector<IGeneratorInfo*> m_generatorsInOrder;
+            bool moveNext() {
+                std::vector<IGeneratorInfo *>::const_iterator it = m_generatorsInOrder.begin();
+                std::vector<IGeneratorInfo *>::const_iterator itEnd = m_generatorsInOrder.end();
+                for (; it != itEnd; ++it) {
+                    if ((*it)->moveNext())
+                        return true;
+                }
+                return false;
+            }
+
+        private:
+            std::map<std::string, IGeneratorInfo *> m_generatorsByName;
+            std::vector<IGeneratorInfo *> m_generatorsInOrder;
     };
 
-    IGeneratorsForTest* createGeneratorsForTest()
-    {
+    IGeneratorsForTest *createGeneratorsForTest() {
         return new GeneratorsForTest();
     }
 

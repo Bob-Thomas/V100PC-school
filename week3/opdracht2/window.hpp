@@ -8,18 +8,20 @@
 #include "vector.hpp"
 
 class window {
-   vector size;
-   int scale;
-   
-   // needed to use the OS window
-   HDC hdc;
-   
-public:
-   window( const vector & size, int scale );
-   void draw( const vector & pixel );
-   void clear();
+        vector size;
+        int scale;
+
+        // needed to use the OS window
+        HDC hdc;
+
+    public:
+        window(const vector &size, int scale);
+
+        void draw(const vector &pixel);
+
+        void clear();
 };
 
-void wait_ms( int n );
+void wait_ms(int n);
 
 #endif // WINDOW_HPP

@@ -15,10 +15,12 @@ namespace Catch {
 
     struct ITagAliasRegistry {
         virtual ~ITagAliasRegistry();
-        virtual Option<TagAlias> find( std::string const& alias ) const = 0;
-        virtual std::string expandAliases( std::string const& unexpandedTestSpec ) const = 0;
 
-        static ITagAliasRegistry const& get();
+        virtual Option<TagAlias> find(std::string const &alias) const = 0;
+
+        virtual std::string expandAliases(std::string const &unexpandedTestSpec) const = 0;
+
+        static ITagAliasRegistry const &get();
     };
 
 } // end namespace Catch

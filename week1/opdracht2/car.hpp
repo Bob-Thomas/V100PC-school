@@ -4,6 +4,7 @@
 
 #ifndef SCHOOL_CAR_H
 #define SCHOOL_CAR_H
+
 #include "window.hpp"
 #include "line.hpp"
 #include "rectangle.hpp"
@@ -19,6 +20,7 @@ class car {
         window &w;
     public:
         car(window &w, int x, int y);
+
         car(window &w, int x, int y, COLORREF color);
 
         void print();

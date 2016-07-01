@@ -13,13 +13,13 @@
 namespace Catch {
 
     // Report the error condition then exit the process
-    inline void fatal( std::string const& message, int exitCode ) {
-        IContext& context = Catch::getCurrentContext();
-        IResultCapture* resultCapture = context.getResultCapture();
-        resultCapture->handleFatalErrorCondition( message );
+    inline void fatal(std::string const &message, int exitCode) {
+        IContext &context = Catch::getCurrentContext();
+        IResultCapture *resultCapture = context.getResultCapture();
+        resultCapture->handleFatalErrorCondition(message);
 
-		if( Catch::alwaysTrue() ) // avoids "no return" warnings
-            exit( exitCode );
+        if (Catch::alwaysTrue()) // avoids "no return" warnings
+            exit(exitCode);
     }
 
 } // namespace Catch
@@ -29,8 +29,8 @@ namespace Catch {
 namespace Catch {
 
     struct FatalConditionHandler {
-		void reset() {}
-	};
+        void reset() {}
+    };
 
 } // namespace Catch
 
@@ -40,37 +40,42 @@ namespace Catch {
 
 namespace Catch {
 
-    struct SignalDefs { int id; const char* name; };
+    struct SignalDefs {
+        int id;
+        const char *name;
+    };
     extern SignalDefs signalDefs[];
     SignalDefs signalDefs[] = {
-            { SIGINT,  "SIGINT - Terminal interrupt signal" },
-            { SIGILL,  "SIGILL - Illegal instruction signal" },
-            { SIGFPE,  "SIGFPE - Floating point error signal" },
-            { SIGSEGV, "SIGSEGV - Segmentation violation signal" },
-            { SIGTERM, "SIGTERM - Termination request signal" },
-            { SIGABRT, "SIGABRT - Abort (abnormal termination) signal" }
-        };
+            {SIGINT,  "SIGINT - Terminal interrupt signal"},
+            {SIGILL,  "SIGILL - Illegal instruction signal"},
+            {SIGFPE,  "SIGFPE - Floating point error signal"},
+            {SIGSEGV, "SIGSEGV - Segmentation violation signal"},
+            {SIGTERM, "SIGTERM - Termination request signal"},
+            {SIGABRT, "SIGABRT - Abort (abnormal termination) signal"}
+    };
 
     struct FatalConditionHandler {
 
-        static void handleSignal( int sig ) {
-            for( std::size_t i = 0; i < sizeof(signalDefs)/sizeof(SignalDefs); ++i )
-                if( sig == signalDefs[i].id )
-                    fatal( signalDefs[i].name, -sig );
-            fatal( "<unknown signal>", -sig );
+        static void handleSignal(int sig) {
+            for (std::size_t i = 0; i < sizeof(signalDefs) / sizeof(SignalDefs); ++i)
+                if (sig == signalDefs[i].id)
+                    fatal(signalDefs[i].name, -sig);
+            fatal("<unknown signal>", -sig);
         }
 
-        FatalConditionHandler() : m_isSet( true ) {
-            for( std::size_t i = 0; i < sizeof(signalDefs)/sizeof(SignalDefs); ++i )
-                signal( signalDefs[i].id, handleSignal );
+        FatalConditionHandler() : m_isSet(true) {
+            for (std::size_t i = 0; i < sizeof(signalDefs) / sizeof(SignalDefs); ++i)
+                signal(signalDefs[i].id, handleSignal);
         }
+
         ~FatalConditionHandler() {
             reset();
         }
+
         void reset() {
-            if( m_isSet ) {
-                for( std::size_t i = 0; i < sizeof(signalDefs)/sizeof(SignalDefs); ++i )
-                    signal( signalDefs[i].id, SIG_DFL );
+            if (m_isSet) {
+                for (std::size_t i = 0; i < sizeof(signalDefs) / sizeof(SignalDefs); ++i)
+                    signal(signalDefs[i].id, SIG_DFL);
                 m_isSet = false;
             }
         }

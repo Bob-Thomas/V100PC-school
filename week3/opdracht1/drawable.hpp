@@ -5,21 +5,26 @@
 #include "window.hpp"
 #include "vector.hpp"
 
+//bob->bob
 class drawable {
-protected:
-   window w;
-   vector location;
-   vector size;
-public:
-   drawable( window & w, const vector & location, const vector & size );   
-   bool overlaps( const drawable & other );
-   virtual void draw() = 0;
-   virtual void update(){}
-   virtual void interact( drawable & other ){}
-   
-   std::ostream & print( std::ostream & out ) const;
+    protected:
+        window w;
+        vector location;
+        vector size;
+    public:
+        drawable(window &w, const vector &location, const vector &size);
+
+        bool overlaps(const drawable &other);
+
+        virtual void draw() = 0;
+
+        virtual void update() { }
+
+        virtual void interact(drawable &other) { }
+
+        std::ostream &print(std::ostream &out) const;
 };
 
-std::ostream & operator<<( std::ostream & lhs, const drawable & rhs );
+std::ostream &operator<<(std::ostream &lhs, const drawable &rhs);
 
 #endif // DRAWABLE_HPP

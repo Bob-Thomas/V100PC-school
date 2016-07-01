@@ -10,15 +10,16 @@
 #include "line.hpp"
 
 class rectangle : public drawable {
-private:
-   vector end;
-   line left;
-   line right;
-   line top;
-   line bottom;
-public:
-   rectangle( window & w, const vector & start, const vector & end );   
-   void draw() override;
+    private:
+        vector end;
+        line left;
+        line right;
+        line top;
+        line bottom;
+    public:
+        rectangle(window &w, const vector &start, const vector &end);
+
+        void draw() override;
 
         void resize(vector &start, vector &end);
 };

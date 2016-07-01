@@ -19,7 +19,9 @@
 
 // Declare Clara inside the Catch namespace
 #define STITCH_CLARA_OPEN_NAMESPACE namespace Catch {
+
 #include "../external/clara.h"
+
 #undef STITCH_CLARA_OPEN_NAMESPACE
 
 

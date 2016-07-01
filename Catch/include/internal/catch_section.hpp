@@ -16,28 +16,26 @@
 namespace Catch {
 
     SectionInfo::SectionInfo
-        (   SourceLineInfo const& _lineInfo,
-            std::string const& _name,
-            std::string const& _description )
-    :   name( _name ),
-        description( _description ),
-        lineInfo( _lineInfo )
-    {}
+            (SourceLineInfo const &_lineInfo,
+             std::string const &_name,
+             std::string const &_description)
+            : name(_name),
+              description(_description),
+              lineInfo(_lineInfo) { }
 
-    Section::Section( SectionInfo const& info )
-    :   m_info( info ),
-        m_sectionIncluded( getResultCapture().sectionStarted( m_info, m_assertions ) )
-    {
+    Section::Section(SectionInfo const &info)
+            : m_info(info),
+              m_sectionIncluded(getResultCapture().sectionStarted(m_info, m_assertions)) {
         m_timer.start();
     }
 
     Section::~Section() {
-        if( m_sectionIncluded ) {
-            SectionEndInfo endInfo( m_info, m_assertions, m_timer.getElapsedSeconds() );
-            if( std::uncaught_exception() )
-                getResultCapture().sectionEndedEarly( endInfo );
+        if (m_sectionIncluded) {
+            SectionEndInfo endInfo(m_info, m_assertions, m_timer.getElapsedSeconds());
+            if (std::uncaught_exception())
+                getResultCapture().sectionEndedEarly(endInfo);
             else
-                getResultCapture().sectionEnded( endInfo );
+                getResultCapture().sectionEnded(endInfo);
         }
     }
 

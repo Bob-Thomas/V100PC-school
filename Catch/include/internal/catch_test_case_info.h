@@ -24,7 +24,7 @@ namespace Catch {
     struct ITestCase;
 
     struct TestCaseInfo {
-        enum SpecialProperties{
+        enum SpecialProperties {
             None = 0,
             IsHidden = 1 << 1,
             ShouldFail = 1 << 2,
@@ -32,19 +32,22 @@ namespace Catch {
             Throws = 1 << 4
         };
 
-        TestCaseInfo(   std::string const& _name,
-                        std::string const& _className,
-                        std::string const& _description,
-                        std::set<std::string> const& _tags,
-                        SourceLineInfo const& _lineInfo );
+        TestCaseInfo(std::string const &_name,
+                     std::string const &_className,
+                     std::string const &_description,
+                     std::set<std::string> const &_tags,
+                     SourceLineInfo const &_lineInfo);
 
-        TestCaseInfo( TestCaseInfo const& other );
+        TestCaseInfo(TestCaseInfo const &other);
 
-        friend void setTags( TestCaseInfo& testCaseInfo, std::set<std::string> const& tags );
+        friend void setTags(TestCaseInfo &testCaseInfo, std::set<std::string> const &tags);
 
         bool isHidden() const;
+
         bool throws() const;
+
         bool okToFail() const;
+
         bool expectedToFail() const;
 
         std::string name;
@@ -58,31 +61,35 @@ namespace Catch {
     };
 
     class TestCase : public TestCaseInfo {
-    public:
+        public:
 
-        TestCase( ITestCase* testCase, TestCaseInfo const& info );
-        TestCase( TestCase const& other );
+            TestCase(ITestCase *testCase, TestCaseInfo const &info);
 
-        TestCase withName( std::string const& _newName ) const;
+            TestCase(TestCase const &other);
 
-        void invoke() const;
+            TestCase withName(std::string const &_newName) const;
 
-        TestCaseInfo const& getTestCaseInfo() const;
+            void invoke() const;
 
-        void swap( TestCase& other );
-        bool operator == ( TestCase const& other ) const;
-        bool operator < ( TestCase const& other ) const;
-        TestCase& operator = ( TestCase const& other );
+            TestCaseInfo const &getTestCaseInfo() const;
 
-    private:
-        Ptr<ITestCase> test;
+            void swap(TestCase &other);
+
+            bool operator==(TestCase const &other) const;
+
+            bool operator<(TestCase const &other) const;
+
+            TestCase &operator=(TestCase const &other);
+
+        private:
+            Ptr<ITestCase> test;
     };
 
-    TestCase makeTestCase(  ITestCase* testCase,
-                            std::string const& className,
-                            std::string const& name,
-                            std::string const& description,
-                            SourceLineInfo const& lineInfo );
+    TestCase makeTestCase(ITestCase *testCase,
+                          std::string const &className,
+                          std::string const &name,
+                          std::string const &description,
+                          SourceLineInfo const &lineInfo);
 }
 
 #ifdef __clang__

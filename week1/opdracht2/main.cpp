@@ -1,9 +1,6 @@
 // template
 #include "window.hpp"
-#include "rectangle.hpp"
-#include "circle.hpp"
 #include "car.hpp"
-#include "windows.h"
 
 int main(int argc, char **argv) {
     window w(300, 300, 2);

@@ -14,18 +14,21 @@ namespace Catch {
 
     struct IGeneratorInfo {
         virtual ~IGeneratorInfo();
+
         virtual bool moveNext() = 0;
+
         virtual std::size_t getCurrentIndex() const = 0;
     };
 
     struct IGeneratorsForTest {
         virtual ~IGeneratorsForTest();
 
-        virtual IGeneratorInfo& getGeneratorInfo( std::string const& fileInfo, std::size_t size ) = 0;
+        virtual IGeneratorInfo &getGeneratorInfo(std::string const &fileInfo, std::size_t size) = 0;
+
         virtual bool moveNext() = 0;
     };
 
-    IGeneratorsForTest* createGeneratorsForTest();
+    IGeneratorsForTest *createGeneratorsForTest();
 
 } // end namespace Catch
 

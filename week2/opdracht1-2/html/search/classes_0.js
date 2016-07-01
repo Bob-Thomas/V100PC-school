@@ -1,4 +1,4 @@
-var searchData=
-[
-  ['rational',['rational',['../classrational.html',1,'']]]
-];
+var searchData =
+    [
+        ['rational', ['rational', ['../classrational.html', 1, '']]]
+    ];

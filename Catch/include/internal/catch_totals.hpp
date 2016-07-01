@@ -13,16 +13,17 @@
 namespace Catch {
 
     struct Counts {
-        Counts() : passed( 0 ), failed( 0 ), failedButOk( 0 ) {}
+        Counts() : passed(0), failed(0), failedButOk(0) { }
 
-        Counts operator - ( Counts const& other ) const {
+        Counts operator-(Counts const &other) const {
             Counts diff;
             diff.passed = passed - other.passed;
             diff.failed = failed - other.failed;
             diff.failedButOk = failedButOk - other.failedButOk;
             return diff;
         }
-        Counts& operator += ( Counts const& other ) {
+
+        Counts &operator+=(Counts const &other) {
             passed += other.passed;
             failed += other.failed;
             failedButOk += other.failedButOk;
@@ -32,9 +33,11 @@ namespace Catch {
         std::size_t total() const {
             return passed + failed + failedButOk;
         }
+
         bool allPassed() const {
             return failed == 0 && failedButOk == 0;
         }
+
         bool allOk() const {
             return failed == 0;
         }
@@ -46,25 +49,25 @@ namespace Catch {
 
     struct Totals {
 
-        Totals operator - ( Totals const& other ) const {
+        Totals operator-(Totals const &other) const {
             Totals diff;
             diff.assertions = assertions - other.assertions;
             diff.testCases = testCases - other.testCases;
             return diff;
         }
 
-        Totals delta( Totals const& prevTotals ) const {
+        Totals delta(Totals const &prevTotals) const {
             Totals diff = *this - prevTotals;
-            if( diff.assertions.failed > 0 )
+            if (diff.assertions.failed > 0)
                 ++diff.testCases.failed;
-            else if( diff.assertions.failedButOk > 0 )
+            else if (diff.assertions.failedButOk > 0)
                 ++diff.testCases.failedButOk;
             else
                 ++diff.testCases.passed;
             return diff;
         }
 
-        Totals& operator += ( Totals const& other ) {
+        Totals &operator+=(Totals const &other) {
             assertions += other.assertions;
             testCases += other.testCases;
             return *this;

@@ -13,19 +13,19 @@
 
 namespace Catch {
 
-    class NotImplementedException : public std::exception
-    {
-    public:
-        NotImplementedException( SourceLineInfo const& lineInfo );
-        NotImplementedException( NotImplementedException const& ) {}
+    class NotImplementedException : public std::exception {
+        public:
+            NotImplementedException(SourceLineInfo const &lineInfo);
 
-        virtual ~NotImplementedException() CATCH_NOEXCEPT {}
+            NotImplementedException(NotImplementedException const &) { }
 
-        virtual const char* what() const CATCH_NOEXCEPT;
+            virtual ~NotImplementedException() CATCH_NOEXCEPT { }
 
-    private:
-        std::string m_what;
-        SourceLineInfo m_lineInfo;
+            virtual const char *what() const CATCH_NOEXCEPT;
+
+        private:
+            std::string m_what;
+            SourceLineInfo m_lineInfo;
     };
 
 } // end namespace Catch

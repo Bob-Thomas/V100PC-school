@@ -114,19 +114,19 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Use variadic macros if the compiler supports them
-#if ( defined _MSC_VER && _MSC_VER > 1400 && !defined __EDGE__) || \
-    ( defined __WAVE__ && __WAVE_HAS_VARIADICS ) || \
-    ( defined __GNUC__ && __GNUC__ >= 3 ) || \
-    ( !defined __cplusplus && __STDC_VERSION__ >= 199901L || __cplusplus >= 201103L )
+#if (defined _MSC_VER && _MSC_VER > 1400 && !defined __EDGE__) || \
+    (defined __WAVE__ && __WAVE_HAS_VARIADICS) || \
+    (defined __GNUC__ && __GNUC__ >= 3) || \
+    (!defined __cplusplus && __STDC_VERSION__ >= 199901L || __cplusplus >= 201103L)
 
 #define CATCH_INTERNAL_CONFIG_VARIADIC_MACROS
 
 #endif
 
 // Use __COUNTER__ if the compiler supports it
-#if ( defined _MSC_VER && _MSC_VER >= 1300 ) || \
-    ( defined __GNUC__  && __GNUC__ >= 4 && __GNUC_MINOR__ >= 3 ) || \
-    ( defined __clang__ && __clang_major__ >= 3 )
+#if (defined _MSC_VER && _MSC_VER >= 1300) || \
+    (defined __GNUC__  && __GNUC__ >= 4 && __GNUC_MINOR__ >= 3) || \
+    (defined __clang__ && __clang_major__ >= 3)
 
 #define CATCH_INTERNAL_CONFIG_COUNTER
 
@@ -237,7 +237,7 @@
 
 // unique_ptr support
 #ifdef CATCH_CONFIG_CPP11_UNIQUE_PTR
-#   define CATCH_AUTO_PTR( T ) std::unique_ptr<T>
+#   define CATCH_AUTO_PTR(T) std::unique_ptr<T>
 #else
 #   define CATCH_AUTO_PTR( T ) std::auto_ptr<T>
 #endif

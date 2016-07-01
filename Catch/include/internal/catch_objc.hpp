@@ -22,12 +22,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 // This protocol is really only here for (self) documenting purposes, since
 // all its methods are optional.
-@protocol OcFixture
+@
+protocol OcFixture
 
 @optional
 
--(void) setUp;
--(void) tearDown;
+-(void)
+setUp;
+-(void)
+tearDown;
 
 @end
 
@@ -35,63 +38,69 @@ namespace Catch {
 
     class OcMethod : public SharedImpl<ITestCase> {
 
-    public:
-        OcMethod( Class cls, SEL sel ) : m_cls( cls ), m_sel( sel ) {}
+        public:
+            OcMethod(Class cls, SEL sel) : m_cls(cls), m_sel(sel) { }
 
-        virtual void invoke() const {
-            id obj = [[m_cls alloc] init];
+            virtual void invoke() const {
+                id obj = [[m_cls
+                alloc] init];
 
-            performOptionalSelector( obj, @selector(setUp)  );
-            performOptionalSelector( obj, m_sel );
-            performOptionalSelector( obj, @selector(tearDown)  );
+                performOptionalSelector(obj, @selector(setUp));
+                performOptionalSelector(obj, m_sel);
+                performOptionalSelector(obj, @selector(tearDown));
 
-            arcSafeRelease( obj );
-        }
-    private:
-        virtual ~OcMethod() {}
+                arcSafeRelease(obj);
+            }
 
-        Class m_cls;
-        SEL m_sel;
+        private:
+            virtual ~OcMethod() { }
+
+            Class m_cls;
+            SEL m_sel;
     };
 
-    namespace Detail{
+    namespace Detail {
 
 
-        inline std::string getAnnotation(   Class cls,
-                                            std::string const& annotationName,
-                                            std::string const& testCaseName ) {
-            NSString* selStr = [[NSString alloc] initWithFormat:@"Catch_%s_%s", annotationName.c_str(), testCaseName.c_str()];
-            SEL sel = NSSelectorFromString( selStr );
-            arcSafeRelease( selStr );
-            id value = performOptionalSelector( cls, sel );
-            if( value )
-                return [(NSString*)value UTF8String];
+        inline std::string getAnnotation(Class cls,
+                                         std::string const &annotationName,
+                                         std::string const &testCaseName) {
+            NSString * selStr = [[NSString
+            alloc] initWithFormat:@"Catch_%s_%s", annotationName.c_str(), testCaseName.c_str()];
+            SEL sel = NSSelectorFromString(selStr);
+            arcSafeRelease(selStr);
+            id value = performOptionalSelector(cls, sel);
+            if (value)
+                return [(NSString *) value
+            UTF8String];
             return "";
         }
     }
 
     inline size_t registerTestMethods() {
         size_t noTestMethods = 0;
-        int noClasses = objc_getClassList( CATCH_NULL, 0 );
+        int noClasses = objc_getClassList(CATCH_NULL, 0);
 
-        Class* classes = (CATCH_UNSAFE_UNRETAINED Class *)malloc( sizeof(Class) * noClasses);
-        objc_getClassList( classes, noClasses );
+        Class *classes = (CATCH_UNSAFE_UNRETAINED Class *) malloc(sizeof(Class) * noClasses);
+        objc_getClassList(classes, noClasses);
 
-        for( int c = 0; c < noClasses; c++ ) {
+        for (int c = 0; c < noClasses; c++) {
             Class cls = classes[c];
             {
                 u_int count;
-                Method* methods = class_copyMethodList( cls, &count );
-                for( u_int m = 0; m < count ; m++ ) {
+                Method *methods = class_copyMethodList(cls, &count);
+                for (u_int m = 0; m < count; m++) {
                     SEL selector = method_getName(methods[m]);
                     std::string methodName = sel_getName(selector);
-                    if( startsWith( methodName, "Catch_TestCase_" ) ) {
-                        std::string testCaseName = methodName.substr( 15 );
-                        std::string name = Detail::getAnnotation( cls, "Name", testCaseName );
-                        std::string desc = Detail::getAnnotation( cls, "Description", testCaseName );
-                        const char* className = class_getName( cls );
+                    if (startsWith(methodName, "Catch_TestCase_")) {
+                        std::string testCaseName = methodName.substr(15);
+                        std::string name = Detail::getAnnotation(cls, "Name", testCaseName);
+                        std::string desc = Detail::getAnnotation(cls, "Description", testCaseName);
+                        const char *className = class_getName(cls);
 
-                        getMutableRegistryHub().registerTest( makeTestCase( new OcMethod( cls, selector ), className, name.c_str(), desc.c_str(), SourceLineInfo() ) );
+                        getMutableRegistryHub().registerTest(
+                                makeTestCase(new OcMethod(cls, selector), className, name.c_str(), desc.c_str(),
+                                             SourceLineInfo()));
                         noTestMethods++;
                     }
                 }
@@ -103,84 +112,105 @@ namespace Catch {
 
     namespace Matchers {
         namespace Impl {
-        namespace NSStringMatchers {
+            namespace NSStringMatchers {
 
-            template<typename MatcherT>
-            struct StringHolder : MatcherImpl<MatcherT, NSString*>{
-                StringHolder( NSString* substr ) : m_substr( [substr copy] ){}
-                StringHolder( StringHolder const& other ) : m_substr( [other.m_substr copy] ){}
-                StringHolder() {
-                    arcSafeRelease( m_substr );
-                }
+                template<typename MatcherT>
+                struct StringHolder : MatcherImpl<MatcherT, NSString *> {
+                    StringHolder(NSString *substr) : m_substr(
 
-                NSString* m_substr;
-            };
+                    [
+                    substr copy
+                    ] ){ }
 
-            struct Equals : StringHolder<Equals> {
-                Equals( NSString* substr ) : StringHolder( substr ){}
+                    StringHolder(StringHolder const &other) : m_substr(
 
-                virtual bool match( ExpressionType const& str ) const {
-                    return  (str != nil || m_substr == nil ) &&
-                            [str isEqualToString:m_substr];
-                }
+                    [other.
+                    m_substr copy
+                    ] ){ }
 
-                virtual std::string toString() const {
-                    return "equals string: " + Catch::toString( m_substr );
-                }
-            };
+                    StringHolder() {
+                        arcSafeRelease(m_substr);
+                    }
 
-            struct Contains : StringHolder<Contains> {
-                Contains( NSString* substr ) : StringHolder( substr ){}
+                    NSString *m_substr;
+                };
 
-                virtual bool match( ExpressionType const& str ) const {
-                    return  (str != nil || m_substr == nil ) &&
-                            [str rangeOfString:m_substr].location != NSNotFound;
-                }
+                struct Equals : StringHolder<Equals> {
+                    Equals(NSString *substr) : StringHolder(substr) { }
 
-                virtual std::string toString() const {
-                    return "contains string: " + Catch::toString( m_substr );
-                }
-            };
+                    virtual bool match(ExpressionType const &str) const {
+                        return (str != nil || m_substr == nil) &&
+                        [str
+                        isEqualToString:
+                        m_substr];
+                    }
 
-            struct StartsWith : StringHolder<StartsWith> {
-                StartsWith( NSString* substr ) : StringHolder( substr ){}
+                    virtual std::string toString() const {
+                        return "equals string: " + Catch::toString(m_substr);
+                    }
+                };
 
-                virtual bool match( ExpressionType const& str ) const {
-                    return  (str != nil || m_substr == nil ) &&
-                            [str rangeOfString:m_substr].location == 0;
-                }
+                struct Contains : StringHolder<Contains> {
+                    Contains(NSString *substr) : StringHolder(substr) { }
 
-                virtual std::string toString() const {
-                    return "starts with: " + Catch::toString( m_substr );
-                }
-            };
-            struct EndsWith : StringHolder<EndsWith> {
-                EndsWith( NSString* substr ) : StringHolder( substr ){}
+                    virtual bool match(ExpressionType const &str) const {
+                        return (str != nil || m_substr == nil) &&
+                        [str
+                        rangeOfString:
+                        m_substr].location != NSNotFound;
+                    }
 
-                virtual bool match( ExpressionType const& str ) const {
-                    return  (str != nil || m_substr == nil ) &&
-                            [str rangeOfString:m_substr].location == [str length] - [m_substr length];
-                }
+                    virtual std::string toString() const {
+                        return "contains string: " + Catch::toString(m_substr);
+                    }
+                };
 
-                virtual std::string toString() const {
-                    return "ends with: " + Catch::toString( m_substr );
-                }
-            };
+                struct StartsWith : StringHolder<StartsWith> {
+                    StartsWith(NSString *substr) : StringHolder(substr) { }
 
-        } // namespace NSStringMatchers
+                    virtual bool match(ExpressionType const &str) const {
+                        return (str != nil || m_substr == nil) &&
+                        [str
+                        rangeOfString:
+                        m_substr].location == 0;
+                    }
+
+                    virtual std::string toString() const {
+                        return "starts with: " + Catch::toString(m_substr);
+                    }
+                };
+
+                struct EndsWith : StringHolder<EndsWith> {
+                    EndsWith(NSString *substr) : StringHolder(substr) { }
+
+                    virtual bool match(ExpressionType const &str) const {
+                        return (str != nil || m_substr == nil) &&
+                        [str
+                        rangeOfString:
+                        m_substr].location == [str
+                        length] - [m_substr
+                        length];
+                    }
+
+                    virtual std::string toString() const {
+                        return "ends with: " + Catch::toString(m_substr);
+                    }
+                };
+
+            } // namespace NSStringMatchers
         } // namespace Impl
 
         inline Impl::NSStringMatchers::Equals
-            Equals( NSString* substr ){ return Impl::NSStringMatchers::Equals( substr ); }
+        Equals(NSString *substr) { return Impl::NSStringMatchers::Equals(substr); }
 
         inline Impl::NSStringMatchers::Contains
-            Contains( NSString* substr ){ return Impl::NSStringMatchers::Contains( substr ); }
+        Contains(NSString *substr) { return Impl::NSStringMatchers::Contains(substr); }
 
         inline Impl::NSStringMatchers::StartsWith
-            StartsWith( NSString* substr ){ return Impl::NSStringMatchers::StartsWith( substr ); }
+        StartsWith(NSString *substr) { return Impl::NSStringMatchers::StartsWith(substr); }
 
         inline Impl::NSStringMatchers::EndsWith
-            EndsWith( NSString* substr ){ return Impl::NSStringMatchers::EndsWith( substr ); }
+        EndsWith(NSString *substr) { return Impl::NSStringMatchers::EndsWith(substr); }
 
     } // namespace Matchers
 
@@ -189,7 +219,7 @@ namespace Catch {
 } // namespace Catch
 
 ///////////////////////////////////////////////////////////////////////////////
-#define OC_TEST_CASE( name, desc )\
+#define OC_TEST_CASE(name, desc)\
 +(NSString*) INTERNAL_CATCH_UNIQUE_NAME( Catch_Name_test ) \
 {\
 return @ name; \

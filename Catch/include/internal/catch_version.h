@@ -12,24 +12,24 @@ namespace Catch {
 
     // Versioning information
     struct Version {
-        Version(    unsigned int _majorVersion,
+            Version(unsigned int _majorVersion,
                     unsigned int _minorVersion,
                     unsigned int _patchNumber,
-                    std::string const& _branchName,
-                    unsigned int _buildNumber );
+                    std::string const &_branchName,
+                    unsigned int _buildNumber);
 
-        unsigned int const majorVersion;
-        unsigned int const minorVersion;
-        unsigned int const patchNumber;
+            unsigned int const majorVersion;
+            unsigned int const minorVersion;
+            unsigned int const patchNumber;
 
-        // buildNumber is only used if branchName is not null
-        std::string const branchName;
-        unsigned int const buildNumber;
+            // buildNumber is only used if branchName is not null
+            std::string const branchName;
+            unsigned int const buildNumber;
 
-        friend std::ostream& operator << ( std::ostream& os, Version const& version );
+            friend std::ostream &operator<<(std::ostream &os, Version const &version);
 
-    private:
-        void operator=( Version const& );
+        private:
+            void operator=(Version const &);
     };
 
     extern Version libraryVersion;

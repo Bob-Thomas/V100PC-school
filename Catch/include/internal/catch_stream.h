@@ -18,45 +18,51 @@
 
 namespace Catch {
 
-    std::ostream& cout();
-    std::ostream& cerr();
+    std::ostream &cout();
+
+    std::ostream &cerr();
 
 
     struct IStream {
         virtual ~IStream() CATCH_NOEXCEPT;
-        virtual std::ostream& stream() const = 0;
+
+        virtual std::ostream &stream() const = 0;
     };
 
     class FileStream : public IStream {
-        mutable std::ofstream m_ofs;
-    public:
-        FileStream( std::string const& filename );
-        virtual ~FileStream() CATCH_NOEXCEPT;
-    public: // IStream
-        virtual std::ostream& stream() const CATCH_OVERRIDE;
+            mutable std::ofstream m_ofs;
+        public:
+            FileStream(std::string const &filename);
+
+            virtual ~FileStream() CATCH_NOEXCEPT;
+
+        public: // IStream
+            virtual std::ostream &stream() const CATCH_OVERRIDE;
     };
 
 
     class CoutStream : public IStream {
-        mutable std::ostream m_os;
-    public:
-        CoutStream();
-        virtual ~CoutStream() CATCH_NOEXCEPT;
+            mutable std::ostream m_os;
+        public:
+            CoutStream();
 
-    public: // IStream
-        virtual std::ostream& stream() const CATCH_OVERRIDE;
+            virtual ~CoutStream() CATCH_NOEXCEPT;
+
+        public: // IStream
+            virtual std::ostream &stream() const CATCH_OVERRIDE;
     };
 
 
     class DebugOutStream : public IStream {
-        std::auto_ptr<StreamBufBase> m_streamBuf;
-        mutable std::ostream m_os;
-    public:
-        DebugOutStream();
-        virtual ~DebugOutStream() CATCH_NOEXCEPT;
+            std::auto_ptr<StreamBufBase> m_streamBuf;
+            mutable std::ostream m_os;
+        public:
+            DebugOutStream();
 
-    public: // IStream
-        virtual std::ostream& stream() const CATCH_OVERRIDE;
+            virtual ~DebugOutStream() CATCH_NOEXCEPT;
+
+        public: // IStream
+            virtual std::ostream &stream() const CATCH_OVERRIDE;
     };
 }
 

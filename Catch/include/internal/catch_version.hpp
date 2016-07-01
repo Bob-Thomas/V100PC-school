@@ -13,31 +13,30 @@
 namespace Catch {
 
     Version::Version
-        (   unsigned int _majorVersion,
-            unsigned int _minorVersion,
-            unsigned int _patchNumber,
-            std::string const& _branchName,
-            unsigned int _buildNumber )
-    :   majorVersion( _majorVersion ),
-        minorVersion( _minorVersion ),
-        patchNumber( _patchNumber ),
-        branchName( _branchName ),
-        buildNumber( _buildNumber )
-    {}
+            (unsigned int _majorVersion,
+             unsigned int _minorVersion,
+             unsigned int _patchNumber,
+             std::string const &_branchName,
+             unsigned int _buildNumber)
+            : majorVersion(_majorVersion),
+              minorVersion(_minorVersion),
+              patchNumber(_patchNumber),
+              branchName(_branchName),
+              buildNumber(_buildNumber) { }
 
-    std::ostream& operator << ( std::ostream& os, Version const& version ) {
-        os  << version.majorVersion << "."
-            << version.minorVersion << "."
-            << version.patchNumber;
+    std::ostream &operator<<(std::ostream &os, Version const &version) {
+        os << version.majorVersion << "."
+        << version.minorVersion << "."
+        << version.patchNumber;
 
-        if( !version.branchName.empty() ) {
-            os  << "-" << version.branchName
-                << "." << version.buildNumber;
+        if (!version.branchName.empty()) {
+            os << "-" << version.branchName
+            << "." << version.buildNumber;
         }
         return os;
     }
 
-    Version libraryVersion( 1, 4, 0, "", 0 );
+    Version libraryVersion(1, 4, 0, "", 0);
 
 }
 

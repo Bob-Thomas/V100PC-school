@@ -15,79 +15,104 @@
 
 namespace Catch {
 
-    struct TestFailureException{};
+    struct TestFailureException {
+    };
 
-    template<typename T> class ExpressionLhs;
+    template<typename T>
+    class ExpressionLhs;
 
     struct STATIC_ASSERT_Expression_Too_Complex_Please_Rewrite_As_Binary_Comparison;
 
     struct CopyableStream {
-        CopyableStream() {}
-        CopyableStream( CopyableStream const& other ) {
+        CopyableStream() { }
+
+        CopyableStream(CopyableStream const &other) {
             oss << other.oss.str();
         }
-        CopyableStream& operator=( CopyableStream const& other ) {
+
+        CopyableStream &operator=(CopyableStream const &other) {
             oss.str("");
             oss << other.oss.str();
             return *this;
         }
+
         std::ostringstream oss;
     };
 
     class ResultBuilder {
-    public:
-        ResultBuilder(  char const* macroName,
-                        SourceLineInfo const& lineInfo,
-                        char const* capturedExpression,
-                        ResultDisposition::Flags resultDisposition,
-                        char const* secondArg = "" );
+        public:
+            ResultBuilder(char const *macroName,
+                          SourceLineInfo const &lineInfo,
+                          char const *capturedExpression,
+                          ResultDisposition::Flags resultDisposition,
+                          char const *secondArg = "");
 
-        template<typename T>
-        ExpressionLhs<T const&> operator <= ( T const& operand );
-        ExpressionLhs<bool> operator <= ( bool value );
+            template<typename T>
+            ExpressionLhs<T const &> operator<=(T const &operand);
 
-        template<typename T>
-        ResultBuilder& operator << ( T const& value ) {
-            m_stream.oss << value;
-            return *this;
-        }
+            ExpressionLhs<bool> operator<=(bool value);
 
-        template<typename RhsT> STATIC_ASSERT_Expression_Too_Complex_Please_Rewrite_As_Binary_Comparison& operator && ( RhsT const& );
-        template<typename RhsT> STATIC_ASSERT_Expression_Too_Complex_Please_Rewrite_As_Binary_Comparison& operator || ( RhsT const& );
+            template<typename T>
+            ResultBuilder &operator<<(T const &value) {
+                m_stream.oss << value;
+                return *this;
+            }
 
-        ResultBuilder& setResultType( ResultWas::OfType result );
-        ResultBuilder& setResultType( bool result );
-        ResultBuilder& setLhs( std::string const& lhs );
-        ResultBuilder& setRhs( std::string const& rhs );
-        ResultBuilder& setOp( std::string const& op );
+            template<typename RhsT>
+            STATIC_ASSERT_Expression_Too_Complex_Please_Rewrite_As_Binary_Comparison &operator&&(RhsT const &);
 
-        void endExpression();
+            template<typename RhsT>
+            STATIC_ASSERT_Expression_Too_Complex_Please_Rewrite_As_Binary_Comparison &operator||(RhsT const &);
 
-        std::string reconstructExpression() const;
-        AssertionResult build() const;
+            ResultBuilder &setResultType(ResultWas::OfType result);
 
-        void useActiveException( ResultDisposition::Flags resultDisposition = ResultDisposition::Normal );
-        void captureResult( ResultWas::OfType resultType );
-        void captureExpression();
-        void captureExpectedException( std::string const& expectedMessage );
-        void captureExpectedException( Matchers::Impl::Matcher<std::string> const& matcher );
-        void handleResult( AssertionResult const& result );
-        void react();
-        bool shouldDebugBreak() const;
-        bool allowThrows() const;
+            ResultBuilder &setResultType(bool result);
 
-    private:
-        AssertionInfo m_assertionInfo;
-        AssertionResultData m_data;
-        struct ExprComponents {
-            ExprComponents() : testFalse( false ) {}
-            bool testFalse;
-            std::string lhs, rhs, op;
-        } m_exprComponents;
-        CopyableStream m_stream;
+            ResultBuilder &setLhs(std::string const &lhs);
 
-        bool m_shouldDebugBreak;
-        bool m_shouldThrow;
+            ResultBuilder &setRhs(std::string const &rhs);
+
+            ResultBuilder &setOp(std::string const &op);
+
+            void endExpression();
+
+            std::string reconstructExpression() const;
+
+            AssertionResult build() const;
+
+            void useActiveException(ResultDisposition::Flags resultDisposition = ResultDisposition::Normal);
+
+            void captureResult(ResultWas::OfType resultType);
+
+            void captureExpression();
+
+            void captureExpectedException(std::string const &expectedMessage);
+
+            void captureExpectedException(Matchers::Impl::Matcher<std::string> const &matcher);
+
+            void handleResult(AssertionResult const &result);
+
+            void react();
+
+            bool shouldDebugBreak() const;
+
+            bool allowThrows() const;
+
+        private:
+            AssertionInfo m_assertionInfo;
+            AssertionResultData m_data;
+
+            struct ExprComponents {
+                ExprComponents() : testFalse(false) { }
+
+                bool testFalse;
+                std::string lhs, rhs, op;
+            } m_exprComponents;
+
+            CopyableStream m_stream;
+
+            bool m_shouldDebugBreak;
+            bool m_shouldThrow;
     };
 
 } // namespace Catch
@@ -98,12 +123,12 @@ namespace Catch {
 namespace Catch {
 
     template<typename T>
-    inline ExpressionLhs<T const&> ResultBuilder::operator <= ( T const& operand ) {
-        return ExpressionLhs<T const&>( *this, operand );
+    inline ExpressionLhs<T const &> ResultBuilder::operator<=(T const &operand) {
+        return ExpressionLhs<T const &>(*this, operand);
     }
 
-    inline ExpressionLhs<bool> ResultBuilder::operator <= ( bool value ) {
-        return ExpressionLhs<bool>( *this, value );
+    inline ExpressionLhs<bool> ResultBuilder::operator<=(bool value) {
+        return ExpressionLhs<bool>(*this, value);
     }
 
 } // namespace Catch

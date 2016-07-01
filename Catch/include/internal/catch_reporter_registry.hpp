@@ -16,34 +16,37 @@ namespace Catch {
 
     class ReporterRegistry : public IReporterRegistry {
 
-    public:
+        public:
 
-        virtual ~ReporterRegistry() CATCH_OVERRIDE {}
+            virtual ~ReporterRegistry() CATCH_OVERRIDE { }
 
-        virtual IStreamingReporter* create( std::string const& name, Ptr<IConfig const> const& config ) const CATCH_OVERRIDE {
-            FactoryMap::const_iterator it =  m_factories.find( name );
-            if( it == m_factories.end() )
-                return CATCH_NULL;
-            return it->second->create( ReporterConfig( config ) );
-        }
+            virtual IStreamingReporter *create(std::string const &name,
+                                               Ptr<IConfig const> const &config) const CATCH_OVERRIDE {
+                FactoryMap::const_iterator it = m_factories.find(name);
+                if (it == m_factories.end())
+                    return CATCH_NULL;
+                return it->second->create(ReporterConfig(config));
+            }
 
-        void registerReporter( std::string const& name, Ptr<IReporterFactory> const& factory ) {
-            m_factories.insert( std::make_pair( name, factory ) );
-        }
-        void registerListener( Ptr<IReporterFactory> const& factory ) {
-            m_listeners.push_back( factory );
-        }
+            void registerReporter(std::string const &name, Ptr<IReporterFactory> const &factory) {
+                m_factories.insert(std::make_pair(name, factory));
+            }
 
-        virtual FactoryMap const& getFactories() const CATCH_OVERRIDE {
-            return m_factories;
-        }
-        virtual Listeners const& getListeners() const CATCH_OVERRIDE {
-            return m_listeners;
-        }
+            void registerListener(Ptr<IReporterFactory> const &factory) {
+                m_listeners.push_back(factory);
+            }
 
-    private:
-        FactoryMap m_factories;
-        Listeners m_listeners;
+            virtual FactoryMap const &getFactories() const CATCH_OVERRIDE {
+                return m_factories;
+            }
+
+            virtual Listeners const &getListeners() const CATCH_OVERRIDE {
+                return m_listeners;
+            }
+
+        private:
+            FactoryMap m_factories;
+            Listeners m_listeners;
     };
 }
 
